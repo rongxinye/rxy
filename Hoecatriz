@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Hoecatriz</title>
+   <!-- Google Fonts -->
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+
+   <style>
+       :root {
+           --bg-blue: #899BB5;
+           --terracotta: #963A20;
+           --terracotta-card: #9B4B30;
+           --terracotta-card-hover: #8E4127;
+           --cream: #F1ECE4;
+           --schedule-bg: #E7E1D6;
+           --ink-dark: #251F1D;
+           --anim-speed: 1.1;
+           --anim-intensity: 1.1;
+       }
+
+       * {
+           box-sizing: border-box;
+           margin: 0;
+           padding: 0;
+       }
+
+       html, body {
+           width: 100%;
+           min-height: 100%;
+           background: transparent;
+           font-family: 'Barlow Condensed', sans-serif;
+           display: flex;
+           justify-content: center;
+           align-items: flex-start;
+           overflow-x: hidden;
+           -webkit-font-smoothing: antialiased;
+       }
+
+       /* Contenedor principal con Container Queries para que nada se descuadre en el iframe */
+       .poster-frame {
+           container-type: inline-size;
+           background-color: var(--bg-blue);
+           width: 100%;
+           max-width: 390px;
+           position: relative;
+           overflow: hidden;
+           padding-bottom: 36px;
+       }
+
+       .font-serif-editorial {
+           font-family: 'Playfair Display', Georgia, serif;
+           font-feature-settings: "liga" 1, "kern" 1;
+       }
+
+       .font-sans-poster {
+           font-family: 'Barlow Condensed', sans-serif;
+           letter-spacing: -0.01em;
+       }
+
+       /* =========================================
+          1. SECCIÓN SUPERIOR: FOTO Y TERRACOTA VIP
+          ========================================= */
+       .top-stage {
+           position: relative;
+           width: 100%;
+           padding: 6cqw 6.2cqw 0 6.2cqw;
+           user-select: none;
+       }
+
+       .top-date {
+           position: absolute;
+           top: 1.3cqw;
+           right: 4.4cqw;
+           z-index: 30;
+           font-weight: 700;
+           font-size: clamp(19px, 6.7cqw, 26px);
+           letter-spacing: -0.02em;
+           color: var(--terracotta);
+           line-height: 1;
+           white-space: nowrap;
+           pointer-events: none;
+       }
+
+       .vertical-superimposed-left,
+       .vertical-superimposed-right {
+           position: absolute;
+           writing-mode: vertical-rl;
+           transform: rotate(180deg);
+           z-index: 30;
+           font-weight: 700;
+           font-size: clamp(18px, 6.5cqw, 25.5px);
+           color: var(--terracotta);
+           letter-spacing: -0.015em;
+           line-height: 1;
+           white-space: nowrap;
+           pointer-events: none;
+       }
+
+       .vertical-superimposed-left {
+           left: 1.3cqw;
+           top: 3.6cqw;
+       }
+
+       .vertical-superimposed-right {
+           right: 1.5cqw;
+           top: 22cqw;
+       }
+
+       .photo-wrapper {
+           position: relative;
+           width: 100%;
+           aspect-ratio: 342 / 386;
+       }
+
+       .photo-container {
+           position: relative;
+           width: 100%;
+           height: 100%;
+           overflow: hidden;
+           background-color: #7d8fa8;
+           cursor: pointer;
+       }
+
+       .custom-photo {
+           display: none;
+           width: 100%;
+           height: 100%;
+           object-fit: cover;
+           object-position: center;
+       }
+
+       .editorial-svg {
+           width: 100%;
+           height: 100%;
+           display: block;
+       }
+
+       .main-title {
+           position: absolute;
+           bottom: -1.2cqw;
+           left: -4cqw;
+           right: -4cqw;
+           z-index: 35;
+           text-align: center;
+           font-weight: 700;
+           font-size: clamp(46px, 16.4cqw, 64px);
+           line-height: 0.9;
+           letter-spacing: -0.03em;
+           color: var(--terracotta);
+           white-space: nowrap;
+           pointer-events: none;
+       }
+
+       /* =========================================
+          2. CUERPO DE TEXTO DEL PÓSTER
+          ========================================= */
+       .body-copy {
+           position: relative;
+           z-index: 20;
+           padding: 3.8cqw 5.9cqw 0 5.9cqw;
+           color: var(--cream);
+           font-size: clamp(18px, 6.35cqw, 24.8px);
+           line-height: 1.23;
+           user-select: none;
+       }
+
+       .poster-line {
+           white-space: nowrap;
+           margin: 0;
+       }
+
+       .bold-line {
+           font-weight: 700;
+       }
+
+       .italic-line {
+           font-weight: 300;
+           font-style: italic;
+           opacity: 0.96;
+       }
+
+       .block-gap {
+           margin-top: 0.9cqw;
+       }
+
+       .question-gap {
+           margin-top: 7.8cqw;
+       }
+
+       .footer-sig-wrap {
+           margin-top: 6.4cqw;
+       }
+
+       .footer-sig {
+           font-weight: 700;
+           font-size: clamp(24px, 8.6cqw, 33.5px);
+           line-height: 1.05;
+           letter-spacing: -0.02em;
+           color: var(--terracotta);
+           white-space: nowrap;
+       }
+
+       /* =========================================
+          3. CARTEL DE ACTIVIDADES (AGENDA)
+          ========================================= */
+       .schedule-section {
+           padding: 7cqw 5.9cqw 0 5.9cqw;
+       }
+
+       .schedule-card {
+           background-color: var(--schedule-bg);
+           border-radius: 7px;
+           padding: 5.8cqw 5.2cqw;
+           box-shadow: 0 6px 18px rgba(34, 45, 62, 0.14);
+       }
+
+       .schedule-day + .schedule-day {
+           margin-top: 5.5cqw;
+       }
+
+       .schedule-day-title {
+           color: var(--terracotta);
+           font-weight: 700;
+           font-size: clamp(21px, 6.9cqw, 27px);
+           line-height: 1.1;
+           letter-spacing: -0.015em;
+           margin-bottom: 1.6cqw;
+       }
+
+       .schedule-list {
+           list-style: none;
+           color: var(--ink-dark);
+           font-size: clamp(17px, 5.4cqw, 21px);
+           font-weight: 700;
+           line-height: 1.3;
+       }
+
+       /* =========================================
+          4. FORMULARIO DE LOGÍSTICA
+          ========================================= */
+       .logistics-section {
+           padding: 7.5cqw 5.9cqw 0 5.9cqw;
+       }
+
+       .logistics-heading {
+           color: var(--terracotta);
+           font-weight: 700;
+           font-size: clamp(21px, 6.7cqw, 26px);
+           line-height: 1.12;
+           letter-spacing: -0.015em;
+           margin-bottom: 4cqw;
+       }
+
+       .form-group {
+           margin-top: 5.5cqw;
+       }
+
+       .form-section-title {
+           color: var(--cream);
+           font-weight: 700;
+           font-size: clamp(18px, 5.6cqw, 22px);
+           line-height: 1.2;
+           margin-bottom: 2.6cqw;
+           letter-spacing: 0.005em;
+       }
+
+       /* Tarjeta Terracota base para Nombre y Opciones */
+       .terra-card {
+           background-color: var(--terracotta-card);
+           border: 1.5px solid transparent;
+           border-radius: 6px;
+           padding: 3cqw 3.6cqw;
+           color: var(--cream);
+           transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.12s ease;
+       }
+
+       .name-card {
+           display: flex;
+           flex-direction: column;
+           gap: 2cqw;
+           padding: 3.2cqw 3.8cqw 4cqw 3.8cqw;
+       }
+
+       .field-label {
+           color: var(--cream);
+           font-size: clamp(15px, 4.5cqw, 17.5px);
+           font-weight: 600;
+           letter-spacing: 0.01em;
+       }
+
+       .text-input,
+       .textarea-input {
+           width: 100%;
+           background-color: #FFFFFF;
+           border: 1.5px solid transparent;
+           border-radius: 5px;
+           padding: 2.8cqw 3.2cqw;
+           font-family: 'Barlow Condensed', sans-serif;
+           font-size: clamp(16px, 4.9cqw, 19px);
+           font-weight: 500;
+           color: var(--ink-dark);
+           outline: none;
+           transition: border-color 0.18s ease, box-shadow 0.18s ease;
+       }
+
+       .text-input::placeholder,
+       .textarea-input::placeholder {
+           color: #8b8580;
+           font-weight: 400;
+       }
+
+       .text-input:focus,
+       .textarea-input:focus {
+           border-color: #251F1D;
+           box-shadow: 0 0 0 2px rgba(241, 236, 228, 0.35);
+       }
+
+       .textarea-input {
+           min-height: 76px;
+           resize: vertical;
+           line-height: 1.25;
+           margin-top: 2.6cqw;
+       }
+
+       /* Stack de opciones (radios y checkboxes) */
+       .options-stack {
+           display: flex;
+           flex-direction: column;
+           gap: 2.3cqw;
+       }
+
+       .option-card {
+           display: flex;
+           align-items: flex-start;
+           gap: 3cqw;
+           cursor: pointer;
+           user-select: none;
+       }
+
+       .option-card.center-align {
+           align-items: center;
+       }
+
+       .option-card:hover {
+           background-color: var(--terracotta-card-hover);
+       }
+
+       .option-card:has(input:checked) {
+           border-color: var(--cream);
+           background-color: #873A20;
+           box-shadow: 0 3px 10px rgba(34, 20, 14, 0.22);
+       }
+
+       .option-card-column {
+           display: block;
+           cursor: pointer;
+           user-select: none;
+       }
+
+       .option-card-column:hover {
+           background-color: var(--terracotta-card-hover);
+       }
+
+       .option-card-column:has(input[type="checkbox"]:checked) {
+           border-color: var(--cream);
+           background-color: #873A20;
+       }
+
+       .option-header-row {
+           display: flex;
+           align-items: center;
+           gap: 3cqw;
+       }
+
+       /* Controles Radio y Checkbox custom (blancos como en Figma) */
+       .custom-control {
+           appearance: none;
+           -webkit-appearance: none;
+           flex-shrink: 0;
+           width: 17px;
+           height: 17px;
+           background-color: #FFFFFF;
+           border: 1.5px solid #FFFFFF;
+           cursor: pointer;
+           position: relative;
+           transition: transform 0.12s ease;
+       }
+
+       .custom-radio {
+           border-radius: 50%;
+           margin-top: 2px;
+       }
+
+       .custom-radio:checked::after {
+           content: "";
+           position: absolute;
+           top: 50%;
+           left: 50%;
+           width: 8px;
+           height: 8px;
+           border-radius: 50%;
+           background-color: var(--terracotta);
+           transform: translate(-50%, -50%);
+       }
+
+       .custom-checkbox {
+           border-radius: 3px;
+       }
+
+       .custom-checkbox:checked::after {
+           content: "";
+           position: absolute;
+           left: 4.5px;
+           top: 1.5px;
+           width: 5px;
+           height: 9px;
+           border: solid var(--terracotta);
+           border-width: 0 2.4px 2.4px 0;
+           transform: rotate(42deg);
+       }
+
+       .option-text-wrap {
+           display: flex;
+           flex-direction: column;
+           gap: 0.7cqw;
+       }
+
+       .option-title {
+           color: var(--cream);
+           font-size: clamp(16.5px, 4.9cqw, 19.5px);
+           font-weight: 600;
+           line-height: 1.15;
+       }
+
+       .option-desc {
+           color: rgba(241, 236, 228, 0.88);
+           font-size: clamp(14px, 4.1cqw, 16px);
+           font-weight: 400;
+           line-height: 1.22;
+       }
+
+       /* Botón Enviar */
+       .submit-wrap {
+           margin-top: 6.5cqw;
+       }
+
+       .submit-btn {
+           width: 100%;
+           background-color: var(--cream);
+           color: var(--terracotta);
+           border: none;
+           border-radius: 6px;
+           padding: 3.1cqw 4cqw;
+           font-family: 'Barlow Condensed', sans-serif;
+           font-size: clamp(18px, 5.4cqw, 21px);
+           font-weight: 700;
+           letter-spacing: 0.02em;
+           display: inline-flex;
+           align-items: center;
+           justify-content: center;
+           gap: 8px;
+           cursor: pointer;
+           box-shadow: 0 4px 12px rgba(34, 45, 62, 0.18);
+           transition: background-color 0.18s ease, transform 0.12s ease, opacity 0.18s ease;
+       }
+
+       .submit-btn:hover:not(:disabled) {
+           background-color: #FFFFFF;
+           transform: translateY(-1px);
+       }
+
+       .submit-btn:active:not(:disabled) {
+           transform: translateY(0);
+       }
+
+       .submit-btn:disabled {
+           opacity: 0.72;
+           cursor: not-allowed;
+       }
+
+       .submit-icon {
+           width: 16px;
+           height: 16px;
+           fill: currentColor;
+           flex-shrink: 0;
+       }
+
+       /* Mensajes de estado del formulario */
+       .form-status {
+           margin-top: 3.2cqw;
+           padding: 3cqw 3.6cqw;
+           border-radius: 6px;
+           font-size: clamp(15px, 4.5cqw, 17.5px);
+           font-weight: 600;
+           line-height: 1.25;
+           text-align: center;
+           display: none;
+       }
+
+       .form-status.success {
+           display: block;
+           background-color: var(--schedule-bg);
+           color: #215732;
+           border: 1.5px solid #215732;
+       }
+
+       .form-status.error {
+           display: block;
+           background-color: #FCEAE6;
+           color: #8F2510;
+           border: 1.5px solid #8F2510;
+       }
+
+       /* Spans para el motor Escenario VIP de las letras terracota */
+       .terra-word {
+           display: inline-block;
+           white-space: nowrap;
+       }
+
+       .terra-char {
+           display: inline-block;
+           transform-origin: 50% 65%;
+           will-change: transform, color, text-shadow;
+           color: var(--terracotta);
+       }
+
+       /* Balanceo suave de las prendas colgadas */
+       @keyframes gentleSway {
+           0%, 100% { transform: rotate(-0.8deg); }
+           50% { transform: rotate(0.9deg); }
+       }
+       @keyframes heelSwayLeft {
+           0%, 100% { transform: rotate(-1.4deg); }
+           50% { transform: rotate(1.2deg); }
+       }
+       @keyframes heelSwayRight {
+           0%, 100% { transform: rotate(1.1deg); }
+           50% { transform: rotate(-1.5deg); }
+       }
+
+       .sway-bodysuit {
+           transform-origin: 145px 46px;
+           animation: gentleSway 6s ease-in-out infinite;
+       }
+       .sway-heel-1 {
+           transform-origin: 248px 46px;
+           animation: heelSwayLeft 4.8s ease-in-out infinite;
+       }
+       .sway-heel-2 {
+           transform-origin: 294px 46px;
+           animation: heelSwayRight 5.3s ease-in-out infinite;
+       }
+
+       .hidden {
+           display: none !important;
+       }
+   </style>
+</head>
+<body>
+
+   <input id="imageUpload" type="file" accept="image/*" class="hidden">
+
+   <main class="poster-frame">
+
+       <!-- 1. SECCIÓN SUPERIOR: FOTO CON TEXTOS TERRACOTA SUPERPUESTOS -->
+       <section class="top-stage">
+
+           <div data-terracotta="vip" data-terra-role="date" class="top-date font-serif-editorial">
+               29 - 31 enero
+           </div>
+
+           <div class="vertical-superimposed-left font-serif-editorial">
+               <div data-terracotta="vip" data-terra-role="vertical-left">
+                   Putita, cantante y actriz
+               </div>
+           </div>
+
+           <div class="vertical-superimposed-right font-serif-editorial">
+               <div data-terracotta="vip" data-terra-role="vertical-right">
+                   San Pedro de Caldas
+               </div>
+           </div>
+
+           <div class="photo-wrapper">
+               <div id="photoContainer" class="photo-container" title="Haz clic si deseas cargar tu propia foto">
+                   <img id="customPhoto" src="" alt="Fotografía" class="custom-photo">
+
+                   <svg id="editorialSvg" viewBox="0 0 342 386" preserveAspectRatio="none" class="editorial-svg">
+                       <defs>
+                           <linearGradient id="curtainBg" x1="0%" y1="0%" x2="100%" y2="0%">
+                               <stop offset="0%" stop-color="#7c8ea5"/>
+                               <stop offset="16%" stop-color="#899bb2"/>
+                               <stop offset="30%" stop-color="#75869c"/>
+                               <stop offset="48%" stop-color="#8fa1b8"/>
+                               <stop offset="64%" stop-color="#76879d"/>
+                               <stop offset="80%" stop-color="#91a2b9"/>
+                               <stop offset="92%" stop-color="#798a9f"/>
+                               <stop offset="100%" stop-color="#8596ad"/>
+                           </linearGradient>
+
+                           <linearGradient id="foldShadow" x1="0%" y1="0%" x2="0%" y2="100%">
+                               <stop offset="0%" stop-color="#1e293b" stop-opacity="0.14"/>
+                               <stop offset="50%" stop-color="#0f172a" stop-opacity="0.03"/>
+                               <stop offset="100%" stop-color="#0f172a" stop-opacity="0.18"/>
+                           </linearGradient>
+
+                           <linearGradient id="metalRod" x1="0%" y1="0%" x2="0%" y2="100%">
+                               <stop offset="0%" stop-color="#475569"/>
+                               <stop offset="32%" stop-color="#cbd5e1"/>
+                               <stop offset="58%" stop-color="#64748b"/>
+                               <stop offset="100%" stop-color="#1e293b"/>
+                           </linearGradient>
+
+                           <pattern id="blackLace" width="16" height="16" patternUnits="userSpaceOnUse">
+                               <rect width="16" height="16" fill="#12171e" fill-opacity="0.36"/>
+                               <circle cx="8" cy="8" r="5.8" fill="none" stroke="#0d1117" stroke-width="0.9" stroke-opacity="0.78"/>
+                               <circle cx="8" cy="8" r="2.1" fill="#0d1117" fill-opacity="0.68"/>
+                               <path d="M 0,8 Q 4,3.5 8,8 Q 12,12.5 16,8" fill="none" stroke="#0b0f14" stroke-width="0.8" stroke-opacity="0.72"/>
+                               <path d="M 8,0 Q 3.5,4 8,8 Q 12.5,12 8,16" fill="none" stroke="#0b0f14" stroke-width="0.8" stroke-opacity="0.72"/>
+                               <circle cx="0" cy="0" r="2.5" fill="#0d1117" fill-opacity="0.5"/>
+                               <circle cx="16" cy="0" r="2.5" fill="#0d1117" fill-opacity="0.5"/>
+                               <circle cx="0" cy="16" r="2.5" fill="#0d1117" fill-opacity="0.5"/>
+                               <circle cx="16" cy="16" r="2.5" fill="#0d1117" fill-opacity="0.5"/>
+                           </pattern>
+
+                           <pattern id="denseLace" width="9" height="9" patternUnits="userSpaceOnUse">
+                               <rect width="9" height="9" fill="#0c1017" fill-opacity="0.72"/>
+                               <path d="M0 4.5 L4.5 0 L9 4.5 L4.5 9 Z" fill="none" stroke="#090c10" stroke-width="1" stroke-opacity="0.88"/>
+                               <circle cx="4.5" cy="4.5" r="1.6" fill="#090c10" fill-opacity="0.88"/>
+                           </pattern>
+                       </defs>
+
+                       <rect width="342" height="386" fill="url(#curtainBg)"/>
+                       <g opacity="0.55">
+                           <rect x="14" y="0" width="20" height="386" fill="#687a91" opacity="0.38"/>
+                           <rect x="68" y="0" width="28" height="386" fill="#9ab0c7" opacity="0.35"/>
+                           <rect x="128" y="0" width="22" height="386" fill="#64758c" opacity="0.32"/>
+                           <rect x="184" y="0" width="34" height="386" fill="#9fb3ca" opacity="0.32"/>
+                           <rect x="242" y="0" width="22" height="386" fill="#63748a" opacity="0.42"/>
+                           <rect x="292" y="0" width="28" height="386" fill="#99adc4" opacity="0.32"/>
+                       </g>
+                       <rect width="342" height="386" fill="url(#foldShadow)"/>
+
+                       <rect x="0" y="43" width="322" height="5.5" fill="url(#metalRod)"/>
+                       <rect x="314" y="42" width="4" height="7.5" fill="#475569"/>
+                       <rect x="322" y="44" width="6" height="3.5" fill="#64748b"/>
+
+                       <g class="sway-bodysuit">
+                           <path d="M 60,44 L 58,105" stroke="#141920" stroke-width="4.2" stroke-linecap="round"/>
+                           <path d="M 82,44 C 85,82 97,108 115,108 C 134,108 147,82 149,44" fill="none" stroke="#181e26" stroke-width="3"/>
+                           <path d="M 176,44 L 179,105" stroke="#141920" stroke-width="4.2" stroke-linecap="round"/>
+
+                           <path d="M 60,45 L 82,45 C 85,84 98,108 116,108 C 134,108 147,84 149,45 L 176,45 L 181,132 L 55,132 Z"
+                                 fill="url(#blackLace)" stroke="#151b22" stroke-width="1.4"/>
+
+                           <path d="M 55,130
+                                    C 53,156 64,182 66,212
+                                    C 68,232 60,248 57,258
+                                    C 84,278 102,312 110,342
+                                    L 128,340
+                                    C 137,306 153,274 177,252
+                                    C 174,238 168,224 170,204
+                                    C 172,178 182,155 181,130 Z"
+                                 fill="url(#blackLace)" stroke="#12171f" stroke-width="1.8"/>
+
+                           <path d="M 55,131 Q 86,119 115,139 Q 104,174 75,170 Q 56,164 55,131 Z"
+                                 fill="url(#denseLace)" stroke="#0f131a" stroke-width="2.4"/>
+                           <path d="M 181,131 Q 150,119 121,139 Q 132,174 161,170 Q 180,164 181,131 Z"
+                                 fill="url(#denseLace)" stroke="#0f131a" stroke-width="2.4"/>
+
+                           <path d="M 60,88 L 92,126" stroke="#0d1117" stroke-width="1.6" stroke-opacity="0.75"/>
+                           <path d="M 176,88 L 144,126" stroke="#0d1117" stroke-width="1.6" stroke-opacity="0.75"/>
+                           <path d="M 83,170 C 89,220 100,280 112,340" fill="none" stroke="#0d1117" stroke-width="1.8" stroke-opacity="0.82"/>
+                           <path d="M 153,170 C 147,220 136,280 124,340" fill="none" stroke="#0d1117" stroke-width="1.8" stroke-opacity="0.82"/>
+                           <path d="M 118,139 L 119,340" fill="none" stroke="#0d1117" stroke-width="1.3" stroke-opacity="0.6"/>
+
+                           <rect x="109" y="336" width="20" height="6" fill="#0d1117"/>
+                       </g>
+
+                       <g class="sway-heel-1">
+                           <path d="M 236,43 C 235,102 233,158 234,222" fill="none" stroke="#181e27" stroke-width="2.3"/>
+                           <path d="M 238,43 C 240,102 241,162 239,228" fill="none" stroke="#181e27" stroke-width="1.8"/>
+                           <path d="M 216,192 L 192,223 L 195,225 L 220,197 Z" fill="#141920"/>
+                           <path d="M 213,184
+                                    C 222,182 229,198 238,218
+                                    C 247,236 261,249 273,256
+                                    L 270,259
+                                    C 254,252 240,239 230,219
+                                    C 222,203 217,193 211,190 Z"
+                                 fill="#12171e" stroke="#0d1117" stroke-width="1"/>
+                           <path d="M 234,218 C 245,216 253,230 246,241" fill="none" stroke="#161c24" stroke-width="2.5"/>
+                           <path d="M 243,234 C 255,230 263,242 259,251" fill="none" stroke="#161c24" stroke-width="2.8"/>
+                       </g>
+
+                       <g class="sway-heel-2">
+                           <path d="M 278,39 C 281,37 286,40 284,47" fill="none" stroke="#141920" stroke-width="4.2" stroke-linecap="round"/>
+                           <path d="M 279,45 C 271,88 268,124 267,162" fill="none" stroke="#161c24" stroke-width="2.2"/>
+                           <path d="M 283,45 C 288,88 292,128 291,174" fill="none" stroke="#161c24" stroke-width="2.1"/>
+                           <path d="M 263,166 L 247,198 L 250,200 L 267,170 Z" fill="#151b22"/>
+                           <path d="M 258,144
+                                    C 267,140 278,150 286,171
+                                    C 294,192 307,212 313,230
+                                    C 315,238 307,245 296,243
+                                    C 283,240 273,228 269,210
+                                    C 265,190 260,176 256,160
+                                    C 254,152 255,146 258,144 Z"
+                                 fill="#1c232d" stroke="#0f141c" stroke-width="1.5"/>
+                           <path d="M 261,149 C 268,147 276,158 283,178 C 290,198 300,218 304,232 C 299,236 289,233 283,222 C 276,208 269,186 262,164 Z"
+                                 fill="#26303d"/>
+                           <path d="M 269,208 C 283,202 299,208 310,222" fill="none" stroke="#11161d" stroke-width="4.5"/>
+                           <path d="M 272,220 C 287,214 303,218 312,230" fill="none" stroke="#11161d" stroke-width="4.5"/>
+                       </g>
+                   </svg>
+               </div>
+
+               <h1 data-terracotta="vip" data-terra-role="hero" class="main-title font-serif-editorial">
+                   Hoecatriz
+               </h1>
+           </div>
+       </section>
+
+       <!-- 2. SECCIÓN DE CUERPO DE TEXTO -->
+       <section class="body-copy font-sans-poster">
+
+           <div>
+               <p class="poster-line bold-line">Estás nominade a los</p>
+               <p class="poster-line bold-line">premios Hoecatriz:</p>
+               <p class="poster-line italic-line">putita, cantante y actriz.</p>
+           </div>
+
+           <div class="block-gap">
+               <p class="poster-line bold-line">Queremos felicitarte,</p>
+               <p class="poster-line bold-line">
+                   <span>has llegado lejos por tu </span><span class="italic-line">talento.</span>
+               </p>
+               <p class="poster-line bold-line">No por el que tienes, sino por el</p>
+               <p class="poster-line bold-line">que te inventas.</p>
+           </div>
+
+           <div class="block-gap">
+               <p class="poster-line italic-line">La tres-en-uno de cualquier</p>
+               <p class="poster-line italic-line">zona vip.</p>
+           </div>
+
+           <div class="block-gap">
+               <p class="poster-line bold-line">No sabes cantar</p>
+               <p class="poster-line bold-line">No sabes actuar</p>
+               <p class="poster-line bold-line">Pero, ¿sabes putear?</p>
+           </div>
+
+           <div class="block-gap">
+               <p class="poster-line bold-line">Sé feliz,</p>
+               <p class="poster-line bold-line">toda una Hoecatriz.</p>
+           </div>
+
+           <div class="question-gap">
+               <p class="poster-line bold-line">¿Estás preparade para mostrar</p>
+               <p class="poster-line bold-line">tus mejores artes?</p>
+           </div>
+
+           <footer class="footer-sig-wrap">
+               <p data-terracotta="vip" data-terra-role="signature" class="footer-sig font-serif-editorial">
+                   Alkuki, Nacho y Ron.
+               </p>
+           </footer>
+
+       </section>
+
+       <!-- 3. CARTEL DE ACTIVIDADES -->
+       <section class="schedule-section" aria-label="Programa de actividades">
+           <div class="schedule-card">
+               <div class="schedule-day">
+                   <h2 class="schedule-day-title font-serif-editorial">Viernes 29</h2>
+                   <ul class="schedule-list font-sans-poster">
+                       <li>Cena</li>
+                       <li>Meet &amp; Greet</li>
+                   </ul>
+               </div>
+
+               <div class="schedule-day">
+                   <h2 class="schedule-day-title font-serif-editorial">Sábado 30</h2>
+                   <ul class="schedule-list font-sans-poster">
+                       <li>Comida</li>
+                       <li>Gala premios Hoecatriz</li>
+                       <li>Cena</li>
+                       <li>Fiestuki</li>
+                   </ul>
+               </div>
+
+               <div class="schedule-day">
+                   <h2 class="schedule-day-title font-serif-editorial">Domingo 31</h2>
+                   <ul class="schedule-list font-sans-poster">
+                       <li>Brunch</li>
+                       <li>Despedida</li>
+                   </ul>
+               </div>
+           </div>
+       </section>
+
+       <!-- 4. FORMULARIO DE LOGÍSTICA CONECTADO A GOOGLE SHEETS -->
+       <section class="logistics-section" aria-label="Formulario de logística">
+           <h2 class="logistics-heading font-serif-editorial">Ayúdanos con la logística</h2>
+
+           <form id="logisticsForm" novalidate>
+
+               <!-- Nombre -->
+               <div class="terra-card name-card">
+                   <label for="guestName" class="field-label">Nombre</label>
+                   <input
+                       id="guestName"
+                       name="nombre"
+                       type="text"
+                       class="text-input"
+                       placeholder="Tu nombre"
+                       autocomplete="name"
+                       required
+                   >
+               </div>
+
+               <!-- 1. Asistencia (Selección única) -->
+               <div class="form-group">
+                   <h3 class="form-section-title">1. Asistencia</h3>
+                   <div class="options-stack">
+                       <label class="terra-card option-card">
+                           <input
+                               type="radio"
+                               name="asistencia"
+                               value="Vie-dom, 2 noches"
+                               class="custom-control custom-radio"
+                               required
+                           >
+                           <span class="option-text-wrap">
+                               <span class="option-title">Pase VIP, 2 noches</span>
+                               <span class="option-desc">Serán 100€ incluyendo alojamiento y la comida.</span>
+                           </span>
+                       </label>
+
+                       <label class="terra-card option-card">
+                           <input
+                               type="radio"
+                               name="asistencia"
+                               value="Featuring, 1 noche"
+                               class="custom-control custom-radio"
+                               required
+                           >
+                           <span class="option-text-wrap">
+                               <span class="option-title">Featuring, 1 noche</span>
+                               <span class="option-desc">Serán 50€ incluyendo alojamiento y la comida.</span>
+                           </span>
+                       </label>
+                   </div>
+               </div>
+
+               <!-- 2. Alcohol (Multiselección) -->
+               <div class="form-group">
+                   <h3 class="form-section-title">2. Alcohol</h3>
+                   <div class="options-stack">
+                       <label class="terra-card option-card center-align">
+                           <input type="checkbox" name="alcohol" value="Cerveza" class="custom-control custom-checkbox">
+                           <span class="option-title">Cerveza</span>
+                       </label>
+                       <label class="terra-card option-card center-align">
+                           <input type="checkbox" name="alcohol" value="Vino blanco" class="custom-control custom-checkbox">
+                           <span class="option-title">Vino blanco</span>
+                       </label>
+                       <label class="terra-card option-card center-align">
+                           <input type="checkbox" name="alcohol" value="Vino tinto" class="custom-control custom-checkbox">
+                           <span class="option-title">Vino tinto</span>
+                       </label>
+                       <label class="terra-card option-card center-align">
+                           <input type="checkbox" name="alcohol" value="Vermut" class="custom-control custom-checkbox">
+                           <span class="option-title">Vermut</span>
+                       </label>
+                       <label class="terra-card option-card center-align">
+                           <input type="checkbox" name="alcohol" value="Vodka" class="custom-control custom-checkbox">
+                           <span class="option-title">Vodka</span>
+                       </label>
+                       <label class="terra-card option-card center-align">
+                           <input type="checkbox" name="alcohol" value="Ginebra" class="custom-control custom-checkbox">
+                           <span class="option-title">Ginebra</span>
+                       </label>
+                       <label class="terra-card option-card center-align">
+                           <input type="checkbox" name="alcohol" value="Ron" class="custom-control custom-checkbox">
+                           <span class="option-title">Ron</span>
+                       </label>
+                       <label class="terra-card option-card center-align">
+                           <input type="checkbox" name="alcohol" value="Whisky" class="custom-control custom-checkbox">
+                           <span class="option-title">Whisky</span>
+                       </label>
+                   </div>
+               </div>
+
+               <!-- 3. Intolerancias alimentarias (Multiselección + texto si elige Otros) -->
+               <div class="form-group">
+                   <h3 class="form-section-title">3. Intolerancias alimentarias</h3>
+                   <div class="options-stack">
+                       <label class="terra-card option-card center-align">
+                           <input type="checkbox" name="intolerancias" value="Vegetariano" class="custom-control custom-checkbox">
+                           <span class="option-title">Vegetariano</span>
+                       </label>
+                       <label class="terra-card option-card center-align">
+                           <input type="checkbox" name="intolerancias" value="Vegano" class="custom-control custom-checkbox">
+                           <span class="option-title">Vegano</span>
+                       </label>
+                       <label class="terra-card option-card center-align">
+                           <input type="checkbox" name="intolerancias" value="Intolerancia al gluten" class="custom-control custom-checkbox">
+                           <span class="option-title">Intolerancia al gluten</span>
+                       </label>
+                       <label class="terra-card option-card center-align">
+                           <input type="checkbox" name="intolerancias" value="Intolerancia a la lactosa" class="custom-control custom-checkbox">
+                           <span class="option-title">Intolerancia a la lactosa</span>
+                       </label>
+
+                       <div class="terra-card option-card-column">
+                           <label class="option-header-row" for="otherIntoleranceCheck">
+                               <input
+                                   id="otherIntoleranceCheck"
+                                   type="checkbox"
+                                   name="intolerancias"
+                                   value="Otros"
+                                   class="custom-control custom-checkbox"
+                               >
+                               <span class="option-title">Otros</span>
+                           </label>
+                           <textarea
+                               id="otherIntoleranceText"
+                               name="otrasIntolerancias"
+                               class="textarea-input"
+                               placeholder="Escribe aquí tus alergias o intolerancias..."
+                           ></textarea>
+                       </div>
+                   </div>
+               </div>
+
+               <!-- Botón Enviar -->
+               <div class="submit-wrap">
+                   <button id="submitBtn" type="submit" class="submit-btn">
+                       <span id="submitBtnText">Enviar</span>
+                       <svg class="submit-icon" viewBox="0 0 24 24" aria-hidden="true">
+                           <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                       </svg>
+                   </button>
+               </div>
+
+               <div id="formStatus" class="form-status" role="status" aria-live="polite"></div>
+
+           </form>
+       </section>
+
+   </main>
+
+   <script>
+       document.addEventListener('DOMContentLoaded', () => {
+           // =========================================================================
+           // URL /exec DE TU APLICACIÓN WEB DE GOOGLE APPS SCRIPT
+           // =========================================================================
+           const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxbpsF0Kl5cGJGQs10V-UA2RguJm8KsybKK7U4IoYSAIPbR2gEV5WILyqaQztBSHa93Ww/exec';
+
+           /* -----------------------------------------
+              1. MOTOR ESCENARIO VIP (LETRAS TERRACOTA)
+              ----------------------------------------- */
+           const photoContainer = document.getElementById('photoContainer');
+           const imageUpload = document.getElementById('imageUpload');
+           const customPhoto = document.getElementById('customPhoto');
+           const editorialSvg = document.getElementById('editorialSvg');
+
+           const speed = 1.1;
+           const intensity = 1.05;
+
+           const terraChars = [];
+           const terraContainers = document.querySelectorAll('[data-terracotta="vip"]');
+           let globalCharIdx = 0;
+
+           terraContainers.forEach((container) => {
+               const role = container.getAttribute('data-terra-role') || 'hero';
+               const text = container.textContent.replace(/\s+/g, ' ').trim();
+               container.textContent = '';
+
+               const words = text.split(' ');
+               words.forEach((wordText, wIdx) => {
+                   const wordSpan = document.createElement('span');
+                   wordSpan.className = 'terra-word';
+
+                   [...wordText].forEach((ch, localIdx) => {
+                       const charSpan = document.createElement('span');
+                       charSpan.className = 'terra-char';
+                       charSpan.textContent = ch;
+
+                       terraChars.push({
+                           el: charSpan,
+                           role: role,
+                           index: globalCharIdx++,
+                           localIdx: localIdx
+                       });
+
+                       wordSpan.appendChild(charSpan);
+                   });
+
+                   container.appendChild(wordSpan);
+                   if (wIdx < words.length - 1) {
+                       container.appendChild(document.createTextNode(' '));
+                   }
+               });
+           });
+
+           let lastTime = performance.now();
+           let animTime = 0;
+
+           function animateTerracottaVIP(now) {
+               const dt = Math.min((now - lastTime) / 1000, 0.05);
+               lastTime = now;
+               animTime += dt * speed;
+
+               terraChars.forEach((c) => {
+                   const i = c.index;
+                   const spotlightWave = Math.max(0, Math.sin(animTime * 3.4 - i * 0.38));
+                   const glowStrength = Math.pow(spotlightWave, 2) * intensity;
+
+                   if (glowStrength > 0.15) {
+                       c.el.style.color = `rgb(${Math.min(255, Math.round(150 + glowStrength * 75))}, ${Math.min(255, Math.round(58 + glowStrength * 52))}, ${Math.min(255, Math.round(32 + glowStrength * 30))})`;
+                       c.el.style.textShadow = `0 2px ${Math.round(11 * glowStrength)}px rgba(224, 90, 54, ${(0.5 * glowStrength).toFixed(2)})`;
+                   } else {
+                       c.el.style.color = '#963A20';
+                       c.el.style.textShadow = 'none';
+                   }
+
+                   if (c.role === 'hero') {
+                       const pulse = Math.sin(animTime * 4.2 - i * 0.42);
+                       const sc = 1 + Math.max(0, pulse) * 0.055 * intensity;
+                       const y = -Math.max(0, pulse) * 3.2 * intensity;
+                       c.el.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0) scale(${sc.toFixed(3)})`;
+                   } else if (c.role === 'vertical-left' || c.role === 'vertical-right') {
+                       const dir = c.role === 'vertical-left' ? 1 : -1;
+                       const slideAlongAxis = Math.sin(animTime * 2.2 * dir + i * 0.22) * 3.8 * intensity;
+                       const scaleBreath = 1 + glowStrength * 0.04;
+                       c.el.style.transform = `translate3d(${slideAlongAxis.toFixed(2)}px, 0, 0) scale(${scaleBreath.toFixed(3)})`;
+                   } else if (c.role === 'date') {
+                       const hop = Math.max(0, Math.sin(animTime * 3.8 - i * 0.35)) * -2.2 * intensity;
+                       const sc = 1 + glowStrength * 0.045;
+                       c.el.style.transform = `translate3d(0, ${hop.toFixed(2)}px, 0) scale(${sc.toFixed(3)})`;
+                   } else if (c.role === 'signature') {
+                       const hop = Math.max(0, Math.sin(animTime * 3.6 - i * 0.32)) * -2.6 * intensity;
+                       const sc = 1 + glowStrength * 0.05;
+                       c.el.style.transform = `translate3d(0, ${hop.toFixed(2)}px, 0) scale(${sc.toFixed(3)})`;
+                   }
+               });
+
+               requestAnimationFrame(animateTerracottaVIP);
+           }
+
+           photoContainer.addEventListener('click', () => imageUpload.click());
+
+           imageUpload.addEventListener('change', (e) => {
+               const file = e.target.files[0];
+               if (!file) return;
+               const reader = new FileReader();
+               reader.onload = (event) => {
+                   customPhoto.src = event.target.result;
+                   customPhoto.style.display = 'block';
+                   editorialSvg.classList.add('hidden');
+               };
+               reader.readAsDataURL(file);
+           });
+
+           requestAnimationFrame(animateTerracottaVIP);
+
+           /* -----------------------------------------
+              2. LÓGICA Y ENVÍO DEL FORMULARIO A SHEETS
+              ----------------------------------------- */
+           const form = document.getElementById('logisticsForm');
+           const nameInput = document.getElementById('guestName');
+           const otherCheck = document.getElementById('otherIntoleranceCheck');
+           const otherText = document.getElementById('otherIntoleranceText');
+           const submitBtn = document.getElementById('submitBtn');
+           const submitBtnText = document.getElementById('submitBtnText');
+           const formStatus = document.getElementById('formStatus');
+
+           // Si alguien escribe en el recuadro de "Otros", se marca automáticamente el checkbox
+           otherText.addEventListener('input', () => {
+               if (otherText.value.trim().length > 0) {
+                   otherCheck.checked = true;
+               }
+           });
+
+           // Al marcar "Otros", enfocamos el recuadro de texto
+           otherCheck.addEventListener('change', () => {
+               if (otherCheck.checked) {
+                   otherText.focus();
+               }
+           });
+
+           function showStatus(type, message) {
+               formStatus.className = `form-status ${type}`;
+               formStatus.textContent = message;
+           }
+
+           form.addEventListener('submit', async (e) => {
+               e.preventDefault();
+               formStatus.className = 'form-status';
+               formStatus.textContent = '';
+
+               const nombre = nameInput.value.trim();
+               const asistenciaChecked = form.querySelector('input[name="asistencia"]:checked');
+               const alcoholValues = [...form.querySelectorAll('input[name="alcohol"]:checked')].map(el => el.value);
+               const intoleranciasValues = [...form.querySelectorAll('input[name="intolerancias"]:checked')].map(el => el.value);
+               const otrasIntolerancias = otherCheck.checked ? otherText.value.trim() : '';
+
+               if (!nombre) {
+                   showStatus('error', 'Por favor, escribe tu nombre antes de enviar.');
+                   nameInput.focus();
+                   return;
+               }
+
+               if (!asistenciaChecked) {
+                   showStatus('error', 'Selecciona si vienes 1 noche o 2 noches.');
+                   return;
+               }
+
+               if (otherCheck.checked && !otrasIntolerancias) {
+                   showStatus('error', 'Has marcado "Otros": indícanos tu intolerancia o alergia en el recuadro.');
+                   otherText.focus();
+                   return;
+               }
+
+               if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('PEGA_AQUI_TU_URL')) {
+                   showStatus('error', 'Falta pegar la URL de Google Apps Script en el código HTML (const APPS_SCRIPT_URL).');
+                   return;
+               }
+
+               const payload = {
+                   nombre,
+                   asistencia: asistenciaChecked.value,
+                   alcohol: alcoholValues.length ? alcoholValues : ['Ninguno'],
+                   intolerancias: intoleranciasValues.length ? intoleranciasValues : ['Ninguna'],
+                   otrasIntolerancias
+               };
+
+               submitBtn.disabled = true;
+               submitBtnText.textContent = 'Enviando...';
+
+               try {
+                   await fetch(APPS_SCRIPT_URL, {
+                       method: 'POST',
+                       mode: 'no-cors',
+                       headers: {
+                           'Content-Type': 'text/plain;charset=utf-8'
+                       },
+                       body: JSON.stringify(payload)
+                   });
+
+                   showStatus('success', `¡Gracias, ${nombre}! Hemos guardado tus respuestas.`);
+                   form.reset();
+               } catch (err) {
+                   showStatus('error', 'No se pudo enviar el formulario. Revisa tu conexión e inténtalo de nuevo.');
+               } finally {
+                   submitBtn.disabled = false;
+                   submitBtnText.textContent = 'Enviar';
+               }
+           });
+       });
+   </script>
+</body>
+</html>
